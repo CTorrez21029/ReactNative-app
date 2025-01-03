@@ -6,17 +6,17 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/AppNavigator'; // Importar el tipo de rutas
 import auth from '@react-native-firebase/auth';
 
-type LoginScreenNavigationProp = NativeStackNavigationProp<
+type RegisterScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'Login'
+  'Register'
 >;
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigation = useNavigation<LoginScreenNavigationProp>();
+  const [isMounted, setIsMounted] = useState(true); // Flag para verificar si el componente está montado
+  const navigation = useNavigation<RegisterScreenNavigationProp>();
 
-  // Verificar si el usuario ya está autenticado
   useEffect(() => {
     const checkAuthStatus = async () => {
       const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
@@ -24,39 +24,59 @@ const LoginScreen = () => {
         navigation.replace('Tabs'); // Redirigir al Home si está autenticado
       }
     };
-
     checkAuthStatus();
+
+    return () => {
+      setIsMounted(false); // Cuando el componente se desmonte, se actualiza el estado
+    };
   }, [navigation]);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Todos los campos son obligatorios');
+      if (isMounted) {
+        Alert.alert('Error', 'Todos los campos son obligatorios');
+      }
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'El correo electrónico no es válido');
+      if (isMounted) {
+        Alert.alert('Error', 'El correo electrónico no es válido');
+      }
+      return;
+    }
+
+    if (password.length < 6) {
+      if (isMounted) {
+        Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+      }
       return;
     }
 
     try {
-      const userCredential = await auth().signInWithEmailAndPassword(
+      const userCredential = await auth().createUserWithEmailAndPassword(
         email,
         password,
       );
       console.log('Usuario registrado:', userCredential.user);
-      await AsyncStorage.setItem('isLoggedIn', '1'); // Guardar el estado de autenticación
-      navigation.replace('Tabs'); // Redirigir al Home
-    } catch (error) {
-      Alert.alert('Error Credenciales incorrectas');
-      console.error(error);
+      navigation.replace('Login'); // Redirige al Login
+    } catch (error: any) {
+      if (isMounted) {
+        if (error.code === 'auth/email-already-in-use') {
+          Alert.alert('Error', 'El correo ya está en uso');
+        } else if (error.code === 'auth/invalid-email') {
+          Alert.alert('Error', 'El correo electrónico no es válido');
+        } else {
+          Alert.alert('Error', 'Ocurrió un error al crear la cuenta');
+        }
+      }
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+      <Text style={styles.title}>Crear Cuenta</Text>
       <TextInput
         placeholder="Correo electrónico"
         style={styles.input}
@@ -74,11 +94,11 @@ const LoginScreen = () => {
         secureTextEntry
         placeholderTextColor="#888"
       />
-      <Button title="Ingresar" onPress={handleLogin} />
+      <Button title="Registrar" onPress={handleRegister} />
       <View style={styles.link}>
         <Button
-          title="Registrarse"
-          onPress={() => navigation.navigate('Register')}
+          title="Iniciar Sesión"
+          onPress={() => navigation.navigate('Login')}
         />
       </View>
     </View>
@@ -107,10 +127,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   link: {
-    color: 'blue',
-    textAlign: 'center',
     marginTop: 20,
+    alignItems: 'center',
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

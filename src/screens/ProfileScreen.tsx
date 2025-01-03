@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/AppNavigator';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -15,6 +16,7 @@ const ProfileScreen = () => {
 
   const handleLogout = async () => {
     try {
+      await auth().signOut();
       await AsyncStorage.removeItem('isLoggedIn');
       console.log('Sesión cerrada');
       navigation.replace('Login');

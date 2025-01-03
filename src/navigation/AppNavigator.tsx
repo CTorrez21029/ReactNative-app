@@ -17,10 +17,12 @@ import LoginScreen from '../screens/LoginScreen';
 import ToDoScreen from '../screens/ToDoScreen';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RegisterScreen from '../screens/RegisterScreen';
 
 // Tipos de parámetros para las rutas
 export type RootStackParamList = {
   Login: undefined; // Ruta para Login
+  Register: undefined; // Ruta para Login
   Tabs: undefined; // Ruta para las pestañas (Tab Navigator)
   Home: undefined; // Ruta para el Stack Navigator dentro de Home
   Detail: {nombre: string; apellido: string}; // Ruta para Detalle con parámetros
@@ -90,7 +92,7 @@ const AppNavigator = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       const authStatus = await AsyncStorage.getItem('isLoggedIn');
-      setIsLoggedIn(authStatus === 'true');
+      setIsLoggedIn(authStatus === '1');
       setIsLoading(false);
     };
 
@@ -107,7 +109,7 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName={isLoggedIn ? 'Tabs' : 'Login'}>
         {/* Pantalla de inicio de sesión */}
 
         <Stack.Screen
@@ -119,6 +121,12 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

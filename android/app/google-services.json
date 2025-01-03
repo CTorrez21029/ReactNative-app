@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "217806641841",
+    "project_id": "pushnotifications-c3674",
+    "storage_bucket": "pushnotifications-c3674.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217806641841:android:599d79500dc68daeec2090",
+        "android_client_info": {
+          "package_name": "com.miappreactnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217806641841-gbon9mkkdlpmg89f0e7e5b693njd7qso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9lTRQK9uCCB07NFQu-fVIlByl2vcz1qE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217806641841-gbon9mkkdlpmg89f0e7e5b693njd7qso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217806641841:android:2ed66c3c51429770ec2090",
+        "android_client_info": {
+          "package_name": "com.pushnotifications"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217806641841-gbon9mkkdlpmg89f0e7e5b693njd7qso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9lTRQK9uCCB07NFQu-fVIlByl2vcz1qE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217806641841-gbon9mkkdlpmg89f0e7e5b693njd7qso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
